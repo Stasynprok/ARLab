@@ -5,13 +5,20 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Lab1Scene.unity
     guid: 45264ef6d47008843a212bbb6a1a7fc6
+  - enabled: 1
+    path: Assets/Scenes/Lab2Scene.unity
+    guid: 8a2cc8cbb4ab7e94b83fdd014dc27c77
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6ee72d15cf39dd748a13eac57397b9af,
       type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 0465d33c6aee55f44b0237db8b0e0259,
+      type: 2}
+    com.needle.xr.arsimulation.PlayerSettings: {fileID: 11400000, guid: c424e50e422a3f54a9b6591b21c967dd,
+      type: 2}
+    com.needle.xr.management.arsimulation_loader: {fileID: 11400000, guid: b5c047e176a314141b6f587bf536bc64,
       type: 2}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: c199e683398494f32b4cde18e73ab731,
       type: 2}
