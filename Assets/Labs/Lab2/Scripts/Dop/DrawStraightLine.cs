@@ -1,22 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
 namespace LAB2DOP
 {
-    public class DrawCurvedLine : MonoBehaviour, IInteractionManagerMode, ILineController
+    public class DrawStraightLine : MonoBehaviour, IInteractionManagerMode, ILineController
     {
-        [SerializeField] private float _minDistance;
         [SerializeField] private GameObject _uiLineController;
         [SerializeField] private GameObject _parentForLine;
         [SerializeField] private GameObject _prefabLine;
         [SerializeField] private ARRaycastManager _raycastManager;
 
         private List<ARRaycastHit> _raycastHits = new List<ARRaycastHit>();
-        private Vector3 _previousPosition;
 
         private Vector2 _centerScreen;
 
@@ -32,27 +29,6 @@ namespace LAB2DOP
         {
             InteractionManager.Instance.ClearAll += DestroyAllLines;
         }
-
-        private void TouchInterpretation(Touch touch)
-        {
-            if (touch.phase == TouchPhase.Began)
-            {
-                CreateLine();
-            }
-
-            if (touch.phase == TouchPhase.Stationary)
-            {
-                DrawLineOnTouch();
-            }
-        }
-        private void CreateLine()
-        {
-            GameObject newLineObject = Instantiate(_prefabLine, _parentForLine.transform);
-            LineRenderer line = newLineObject.GetComponent<LineRenderer>();
-            _currentLine = line;
-            _lines.Add(line);
-        }
-
         private void DestroyAllLines()
         {
             foreach (LineRenderer line in _lines)
@@ -61,29 +37,6 @@ namespace LAB2DOP
             }
             _lines.Clear();
             _currentLine = null;
-        }
-
-        private void DrawLineOnTouch()
-        {
-            if (!_currentLine)
-            {
-                return;
-            }
-            _raycastManager.Raycast(_centerScreen, _raycastHits, TrackableType.Planes);
-
-            if (_raycastHits.Count == 0)
-            {
-                return;
-            }
-
-            Vector3 currentPosition = _raycastHits[0].pose.position;
-
-            if (_currentLine.positionCount == 0 || Vector3.Distance(currentPosition, _previousPosition) > _minDistance)
-            {
-                _currentLine.positionCount++;
-                _currentLine.SetPosition(_currentLine.positionCount - 1, currentPosition);
-                _previousPosition = currentPosition;
-            }
         }
 
         public void Activate()
@@ -100,6 +53,60 @@ namespace LAB2DOP
         {
             TouchInterpretation(touches[0]);
         }
+        private void TouchInterpretation(Touch touch)
+        {
+            if (touch.phase == TouchPhase.Began)
+            {
+                CreateLine();
+            }
+
+            if (touch.phase == TouchPhase.Stationary)
+            {
+                UpdatePointOnTouch();
+            }
+
+            if (touch.phase == TouchPhase.Ended)
+            {
+
+            }
+        }
+
+        private void CreateLine()
+        {
+            GameObject newLineObject = Instantiate(_prefabLine, _parentForLine.transform);
+            LineRenderer line = newLineObject.GetComponent<LineRenderer>();
+            _currentLine = line;
+            _lines.Add(line);
+        }
+
+        private void UpdatePointOnTouch()
+        {
+            if (!_currentLine)
+            {
+                return;
+            }
+            _raycastManager.Raycast(_centerScreen, _raycastHits, TrackableType.Planes);
+
+            if (_raycastHits.Count == 0)
+            {
+                return;
+            }
+
+            Vector3 currentPosition = _raycastHits[0].pose.position;
+
+            if (_currentLine.positionCount > 1)
+            {
+                _currentLine.SetPosition(1, currentPosition);
+                return;
+            }
+
+            if (_currentLine.positionCount <= 1)
+            {
+                _currentLine.positionCount++;
+                _currentLine.SetPosition(_currentLine.positionCount - 1, currentPosition);
+                return;
+            }
+        }
 
         public void ChangeColorLine(Color color)
         {
@@ -110,5 +117,6 @@ namespace LAB2DOP
         {
 
         }
+
     }
 }
