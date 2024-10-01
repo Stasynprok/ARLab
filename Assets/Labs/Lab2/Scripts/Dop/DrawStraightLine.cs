@@ -20,6 +20,9 @@ namespace LAB2DOP
         private List<LineRenderer> _lines = new List<LineRenderer>();
         private LineRenderer _currentLine;
 
+        private float _lineWidth = 0.05f;
+        private Color _lineColor = Color.white;
+
         private void Awake()
         {
             _centerScreen = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
@@ -75,6 +78,10 @@ namespace LAB2DOP
         {
             GameObject newLineObject = Instantiate(_prefabLine, _parentForLine.transform);
             LineRenderer line = newLineObject.GetComponent<LineRenderer>();
+            line.startColor = _lineColor;
+            line.endColor = _lineColor;
+            line.startWidth = _lineWidth;
+            line.endWidth = _lineWidth;
             _currentLine = line;
             _lines.Add(line);
         }
@@ -110,12 +117,12 @@ namespace LAB2DOP
 
         public void ChangeColorLine(Color color)
         {
-
+            _lineColor = color;
         }
 
         public void ChangeWidth(float width)
         {
-
+            _lineWidth = width;
         }
 
     }
