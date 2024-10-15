@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using LAB3;
 
 namespace LAB2_ZIP
 {
@@ -25,7 +26,7 @@ namespace LAB2_ZIP
 
         public void SelectMode(int mode)
         {
-            InteractionManager.Instance.SelectMode(mode);
+            LAB3.InteractionManager.Instance.SelectMode(mode);
         }
     }
 

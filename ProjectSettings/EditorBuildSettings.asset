@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Lab1Scene.unity
     guid: 45264ef6d47008843a212bbb6a1a7fc6
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Lab2Scene.unity
     guid: 8a2cc8cbb4ab7e94b83fdd014dc27c77
+  - enabled: 1
+    path: Assets/Scenes/Lab3.unity
+    guid: 18cfb62c3deb4e74fa5a536ae4fe489b
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6ee72d15cf39dd748a13eac57397b9af,
       type: 2}

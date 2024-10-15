@@ -1,3 +1,4 @@
+using LAB3;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace LAB2_ZIP
         [SerializeField] private GameObject _targetMarkerPrefab;
 
         private int _spawnedObjectType = -1;
+        private int _spawnedObjectCount = 0;
         private GameObject _targetMarker;
 
         private void Start()
@@ -38,7 +40,7 @@ namespace LAB2_ZIP
 
         public void BackToDefaultScreen()
         {
-            InteractionManager.Instance.SelectMode(0);
+            LAB3.InteractionManager.Instance.SelectMode(0);
         }
 
         public void SetSpawnedObjectType(int spawnedObjectType)
@@ -86,17 +88,25 @@ namespace LAB2_ZIP
 
         private void MoveMarker(Vector2 touchPosition)
         {
-            _targetMarker.transform.position = InteractionManager.Instance.GetARRaycastHits(touchPosition)[0].pose.position;
+            _targetMarker.transform.position = LAB3.InteractionManager.Instance.GetARRaycastHits(touchPosition)[0].pose.position;
         }
 
         private void SpawnObject(Touch touch)
         {
-            Instantiate(
+            GameObject newObject = Instantiate(
                 original: _spawnedObjectPrefabs[_spawnedObjectType],
-                position: InteractionManager.Instance.GetARRaycastHits(touch.position)[0].pose.position,
+                position: LAB3.InteractionManager.Instance.GetARRaycastHits(touch.position)[0].pose.position,
                 rotation: _spawnedObjectPrefabs[_spawnedObjectType].transform.rotation
             );
+
+            CreatedObject objectDiscription = newObject.GetComponent<CreatedObject>();
+            if (!objectDiscription)
+            {
+                Debug.LogError($"[ObjectCreationMode] {newObject.name} missing CreatedObject!");
+                return;
+            }
+            objectDiscription.GiveNumber(++_spawnedObjectCount);
+            ObjectControllerSingletone.Instance.AddCreatedObject(objectDiscription);
         }
     }
-
 }
