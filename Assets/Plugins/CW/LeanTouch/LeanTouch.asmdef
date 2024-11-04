@@ -1,0 +1,20 @@
+{
+    "name": "LeanTouch",
+    "rootNamespace": "",
+    "references": [
+        "LeanCommon",
+        "CW.Common"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
