@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6699765403784753260}
   - component: {fileID: 4971595992207769106}
   - component: {fileID: 5743503923091276397}
+  - component: {fileID: 5691777941246836440}
   m_Layer: 0
   m_Name: RedCube
   m_TagString: CreatedObject
@@ -120,3 +121,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _displayName: Red cube
   _description: Just Red cube
+  _rigidbody: {fileID: 5691777941246836440}
+  _speedFastMove: 2
+  _collider: {fileID: 4971595992207769106}
+--- !u!54 &5691777941246836440
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164294860659740797}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
