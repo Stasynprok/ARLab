@@ -74,6 +74,7 @@ public class ImageDetectionMode : MonoBehaviour, IInteractionManagerMode
         foreach (var addedImage in args.added)
         {
             ActivateTrackedObject(addedImage.referenceImage.name);
+            UpdateTrackedObject(addedImage);
         }
 
         foreach (var updated in args.updated)

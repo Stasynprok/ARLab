@@ -1,9 +1,6 @@
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using System.Collections.Generic;
-using Unity.Collections;
-using System.Drawing;
-using UnityEngine.XR.ARSubsystems;
 using System;
 
 public class SpawnInPolygon : MonoBehaviour

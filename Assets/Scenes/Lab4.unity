@@ -335,6 +335,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Select object (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4347247092083671027, guid: 3237653c6a57cb144bfd77cdb11407b9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4606862551047700053, guid: 3237653c6a57cb144bfd77cdb11407b9,
         type: 3}
       propertyPath: m_Pivot.x
@@ -5136,7 +5141,7 @@ MonoBehaviour:
   m_FocusMode: -1
   m_LightEstimationMode: -1
   m_AutoFocus: 1
-  m_LightEstimation: 0
+  m_LightEstimation: -1
   m_FacingDirection: 1
   m_RenderMode: 0
 --- !u!81 &1740832905
@@ -5353,6 +5358,7 @@ GameObject:
   - component: {fileID: 1829813173}
   - component: {fileID: 1829813172}
   - component: {fileID: 1829813171}
+  - component: {fileID: 1829813174}
   m_Layer: 0
   m_Name: Directional Light (1)
   m_TagString: Untagged
@@ -5460,6 +5466,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &1829813174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829813170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cc735ca595870e46886bc29431c40da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cameraManager: {fileID: 1740832904}
 --- !u!1 &1842554872
 GameObject:
   m_ObjectHideFlags: 0

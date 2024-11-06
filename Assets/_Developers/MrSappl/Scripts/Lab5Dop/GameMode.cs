@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.EnhancedTouch;
-using UnityEngine.UI;
 using static InteractionManager;
 
 public class GameMode : MonoBehaviour, IInteractionManagerMode
@@ -79,20 +75,17 @@ public class GameMode : MonoBehaviour, IInteractionManagerMode
 
     private void TrySelectObject(Vector2 pos)
     {
-        Debug.LogError("TrySelectObject");
         // fire a ray from camera to the target screen position
         Ray ray = InteractionManager.Instance.ARCamera.ScreenPointToRay(pos);
         RaycastHit hitObject;
         if (!Physics.Raycast(ray, out hitObject))
         {
-            Debug.LogError("Raycast false");
             return;
         }
             
 
         if (!hitObject.collider.CompareTag("CreatedObject"))
         {
-            Debug.LogError("CompareTag(CreatedObject) false");
             return;
         }
 
@@ -101,7 +94,6 @@ public class GameMode : MonoBehaviour, IInteractionManagerMode
         ObjectForGame objectForGame = selectedObject.GetComponent<ObjectForGame>();
 
         _spawnInPolygon.GetSelectedObject(objectForGame);
-
     }
 
     private void WinAction()

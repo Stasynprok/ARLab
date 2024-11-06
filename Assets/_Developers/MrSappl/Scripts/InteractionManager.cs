@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -48,6 +49,9 @@ public class InteractionManager : MonoBehaviour
 
     private const int DEFAULT_MODE = 0;
 
+    private Touch _simulatedTouch;
+    private bool _touchSimulationOn = false;
+
     #region Singleton
     /// <summary>
     /// Instance of our Singleton
@@ -85,6 +89,7 @@ public class InteractionManager : MonoBehaviour
         _aRAnchorManager = GetComponent<ARAnchorManager>();
         _arImageManager = GetComponent<ARTrackedImageManager>();
         _arFaceManager = GetComponent<ARFaceManager>();
+        _simulatedTouch = new Touch();
 
 
         _arCameraManager = GetComponentInChildren<ARCameraManager>();
@@ -156,12 +161,10 @@ public class InteractionManager : MonoBehaviour
         if (state)
         {
             _arCameraManager.requestedFacingDirection = CameraFacingDirection.User;
-            Debug.Log("[Stasyn] .User");
         }
         else
         {
             _arCameraManager.requestedFacingDirection = CameraFacingDirection.World;
-            Debug.Log("[Stasyn] .World");
         }
     }
 
@@ -247,16 +250,12 @@ public class InteractionManager : MonoBehaviour
     private void UpdateModes()
     {
         for (int i = 0; i < _modes.Length; i++)
-        {
-            if (_currentMode == _modes[i])
-            {
-                _modes[i].Activate();
-            }
-            else
-            {
+            if (_currentMode != _modes[i])
                 _modes[i].Deactivate();
-            }
-        }
+
+        for (int i = 0; i < _modes.Length; i++)
+            if (_currentMode == _modes[i])
+                _modes[i].Activate();
     }
 
     public void SelectMode(int modeNumber)
@@ -270,11 +269,60 @@ public class InteractionManager : MonoBehaviour
         SelectMode(DEFAULT_MODE);
     }
 
+    public static bool IsMouseOverUi
+    {
+        get
+        {
+            EventSystem eventSystem = EventSystem.current;
+            return (eventSystem != null && eventSystem.IsPointerOverGameObject());
+        }
+    }
+
     private void Update()
     {
         // if no mode selected, we do nothing
         if (_currentMode == null)
             return;
+
+#if UNITY_EDITOR
+        // mouse simulation
+        if (Input.GetMouseButtonDown(0) && !_touchSimulationOn)
+        {
+            if (IsMouseOverUi)
+                return;
+
+            _touchSimulationOn = true;
+            _simulatedTouch.phase = UnityEngine.TouchPhase.Began;
+            _simulatedTouch.position = Input.mousePosition;
+            _currentMode.TouchInteraction(new Touch[1] { _simulatedTouch });
+            return;
+        }
+        if (Input.GetMouseButtonUp(0) && _touchSimulationOn)
+        {
+            _touchSimulationOn = false;
+            _simulatedTouch.phase = UnityEngine.TouchPhase.Ended;
+            _simulatedTouch.position = Input.mousePosition;
+            _currentMode.TouchInteraction(new Touch[1] { _simulatedTouch });
+            return;
+        }
+
+        if (_touchSimulationOn)
+        {
+            Vector2 newTouchPosition = Input.mousePosition;
+            if (newTouchPosition != _simulatedTouch.position)
+            {
+                _simulatedTouch.phase = UnityEngine.TouchPhase.Moved;
+                _simulatedTouch.position = newTouchPosition;
+                _currentMode.TouchInteraction(new Touch[1] { _simulatedTouch });
+            }
+            else
+            {
+                _simulatedTouch.phase = UnityEngine.TouchPhase.Stationary;
+                _simulatedTouch.position = newTouchPosition;
+                _currentMode.TouchInteraction(new Touch[1] { _simulatedTouch });
+            }
+        }
+#endif
 
         if (Input.touchCount > 0)
         {
