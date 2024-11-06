@@ -1,4 +1,3 @@
-using Lean.Touch;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +5,13 @@ using UnityEngine.Events;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
+[RequireComponent((typeof(ARPlaneManager)))]
 [RequireComponent(typeof(ARRaycastManager))]
+[RequireComponent(typeof(ARAnchorManager))]
+[RequireComponent(typeof(ARTrackedImageManager))]
+[RequireComponent(typeof(ARFaceManager))]
 public class InteractionManager : MonoBehaviour
 {
-
     [SerializeField] private GameObject[] _modeObjects;
     private Camera _arCamera;
     public Camera ARCamera
@@ -20,10 +22,28 @@ public class InteractionManager : MonoBehaviour
         }
     }
 
+    public enum ManagerMode { Planes, Images, Faces }
+    public ManagerMode CurrentManagerMode
+    {
+        get
+        {
+            return _currentManagerMode;
+        }
+    }
+    private ManagerMode _currentManagerMode = ManagerMode.Planes;
+
+    [SerializeField] private GameObject _detectPlaneHintObject;
+    private bool _firstPlaneDetected = false;
+
     private IInteractionManagerMode[] _modes;
     private IInteractionManagerMode _currentMode = null;
 
     private ARRaycastManager _aRRaycastManager;
+    private ARPlaneManager _aRPlaneManager;
+    private ARAnchorManager _aRAnchorManager;
+    private ARTrackedImageManager _arImageManager;
+    private ARFaceManager _arFaceManager;
+    private ARCameraManager _arCameraManager;
     private List<ARRaycastHit> _raycastHits;
 
     private const int DEFAULT_MODE = 0;
@@ -61,6 +81,15 @@ public class InteractionManager : MonoBehaviour
         // setup variables
         _aRRaycastManager = GetComponent<ARRaycastManager>();
         _raycastHits = new List<ARRaycastHit>();
+        _aRPlaneManager = GetComponent<ARPlaneManager>();
+        _aRAnchorManager = GetComponent<ARAnchorManager>();
+        _arImageManager = GetComponent<ARTrackedImageManager>();
+        _arFaceManager = GetComponent<ARFaceManager>();
+
+
+        _arCameraManager = GetComponentInChildren<ARCameraManager>();
+        if (!_arCameraManager)
+            throw new MissingComponentException("ARCameraManager component not found!");
 
         // get interfaces from game objects
         _modes = new IInteractionManagerMode[_modeObjects.Length];
@@ -72,6 +101,123 @@ public class InteractionManager : MonoBehaviour
                 throw new MissingComponentException("Missing mode component on " + _modeObjects[i].name);
             Debug.Log("[INTERACTION_MANAGER] Found mode = " + _modes[i]);
         }
+
+        SetManagerMode(_currentManagerMode);
+    }
+
+    private void OnEnable()
+    {
+        _aRPlaneManager.planesChanged += OnPlanesChanged;
+        _aRAnchorManager.anchorsChanged += OnAnchorsChanged;
+    }
+
+    private void OnDisable()
+    {
+        _aRPlaneManager.planesChanged -= OnPlanesChanged;
+        _aRAnchorManager.anchorsChanged -= OnAnchorsChanged;
+    }
+
+    public void SetManagerMode(ManagerMode newMode)
+    {
+        _currentManagerMode = newMode;
+        switch (newMode)
+        {
+            case ManagerMode.Planes:
+                ShowPlanes(true);
+                _arImageManager.enabled = false;
+                _arFaceManager.enabled = false;
+                break;
+            case ManagerMode.Images:
+                ShowPlanes(false);
+                _arImageManager.enabled = true;
+                _arFaceManager.enabled = false;
+                break;
+            case ManagerMode.Faces:
+                ShowPlanes(false);
+                _arImageManager.enabled = false;
+                _arFaceManager.enabled = true;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void ShowPlanes(bool state)
+    {
+        foreach (ARPlane plane in _aRPlaneManager.trackables)
+            plane.gameObject.SetActive(state);
+        _aRPlaneManager.enabled = state;
+    }
+
+    public void ShowFrontalCamera(bool state)
+    {
+        _aRRaycastManager.enabled = !state;
+        _aRAnchorManager.enabled = !state;
+        if (state)
+        {
+            _arCameraManager.requestedFacingDirection = CameraFacingDirection.User;
+            Debug.Log("[Stasyn] .User");
+        }
+        else
+        {
+            _arCameraManager.requestedFacingDirection = CameraFacingDirection.World;
+            Debug.Log("[Stasyn] .World");
+        }
+    }
+
+
+    private void OnAnchorsChanged(ARAnchorsChangedEventArgs args)
+    {
+        if (args.added.Count > 0)
+        {
+            foreach (ARAnchor anchor in args.added)
+            {
+                Debug.Log("[INTERACTION_MANAGER]: added anchor " + anchor.name);
+            }
+        }
+
+        if (args.updated.Count > 0)
+        {
+            foreach (ARAnchor anchor in args.updated)
+            {
+                Debug.Log("[INTERACTION_MANAGER]: updated anchor " + anchor.name);
+            }
+        }
+
+        if (args.removed.Count > 0)
+        {
+            foreach (ARAnchor anchor in args.removed)
+            {
+                Debug.Log("[INTERACTION_MANAGER]: removed anchor " + anchor.name);
+            }
+        }
+    }
+
+    private void OnPlanesChanged(ARPlanesChangedEventArgs args)
+    {
+        if (args.added.Count > 0)
+        {
+            foreach (ARPlane plane in args.added)
+            {
+                Debug.Log("[INTERACTION_MANAGER]: added plane " + plane.name);
+            }
+
+            ShowFirstScreen();
+        }
+        if (args.updated.Count > 0)
+        {
+            foreach (ARPlane plane in args.added)
+            {
+                Debug.Log("[INTERACTION_MANAGER]: updated plane " + plane.name);
+            }
+        }
+        if (args.removed.Count > 0)
+        {
+            foreach (ARPlane plane in args.added)
+            {
+                Debug.Log("[INTERACTION_MANAGER]: removed plane " + plane.name);
+            }
+        }
     }
 
     private void Start()
@@ -80,6 +226,15 @@ public class InteractionManager : MonoBehaviour
         _arCamera = GetComponentInChildren<Camera>();
         if (!_arCamera)
             throw new MissingComponentException("[INTERACTION_MANAGER] Camera not found in children of Interaction manager!");
+    }
+
+    private void ShowFirstScreen()
+    {
+        if (_firstPlaneDetected)
+            return;
+        else
+            _firstPlaneDetected = true;
+        _detectPlaneHintObject.SetActive(false);
 
         // reset current screen
         ReturnToDefaultMode();
@@ -143,5 +298,10 @@ public class InteractionManager : MonoBehaviour
         );
         return _raycastHits;
     }
-}
 
+    public TrackableCollection<ARPlane> GetPlanes()
+    {
+        TrackableCollection<ARPlane> allPlanes = _aRPlaneManager.trackables;
+        return allPlanes;
+    }
+}

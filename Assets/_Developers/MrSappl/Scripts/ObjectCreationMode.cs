@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
 
 public class ObjectCreationMode : MonoBehaviour, IInteractionManagerMode
 {
@@ -52,13 +53,12 @@ public class ObjectCreationMode : MonoBehaviour, IInteractionManagerMode
             return;
 
         Touch touch = touches[0];
-        bool overUI = Vector2Extensions.IsPointOverUIObject(touch.position);
+        bool overUI = touch.position.IsPointOverUIObject();
 
         if (touch.phase == TouchPhase.Began)
         {
             if (!overUI)
             {
-                Debug.LogWarning("[DEBUGA] TouchPhase.Began");
                 ShowMarker(true);
                 MoveMarker(touch.position);
             }
@@ -72,7 +72,6 @@ public class ObjectCreationMode : MonoBehaviour, IInteractionManagerMode
         {
             if (_targetMarker.activeSelf)
             {
-                Debug.LogWarning("[DEBUGA] TouchPhase.Ended");
                 SpawnObject(touch);
                 ShowMarker(false);
             }
@@ -96,12 +95,11 @@ public class ObjectCreationMode : MonoBehaviour, IInteractionManagerMode
             rotation: _spawnedObjectPrefabs[_spawnedObjectType].transform.rotation
         );
 
-        CreatedObject objectDiscription = newObject.GetComponent<CreatedObject>();
-        if (!objectDiscription)
-        {
-            Debug.LogError($"[ObjectCreationMode] {newObject.name} missing CreatedObject!");
-            return;
-        }
-        objectDiscription.GiveNumber(++_spawnedObjectCount);
+        CreatedObject objectDescription = newObject.GetComponent<CreatedObject>();
+        if (objectDescription == null)
+            throw new MissingComponentException("[OBJECT_CREATION_MODE] " + newObject.name + " missing CreatedObject!");
+        objectDescription.GiveNumber(++_spawnedObjectCount);
+
+        newObject.AddComponent<ARAnchor>();
     }
 }
