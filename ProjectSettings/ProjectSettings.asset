@@ -161,7 +161,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.SGProj.ARLab_3
+    Android: com.SGProj.ARLab_6
     Standalone: com.SGProj.ARLabs
     iPhone: com.unity.template.armobile
   buildNumber:
