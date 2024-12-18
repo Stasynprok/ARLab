@@ -9,8 +9,6 @@ using UnityEngine.XR.ARSubsystems;
 [RequireComponent((typeof(ARPlaneManager)))]
 [RequireComponent(typeof(ARRaycastManager))]
 [RequireComponent(typeof(ARAnchorManager))]
-[RequireComponent(typeof(ARTrackedImageManager))]
-[RequireComponent(typeof(ARFaceManager))]
 public class InteractionManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] _modeObjects;
@@ -42,8 +40,6 @@ public class InteractionManager : MonoBehaviour
     private ARRaycastManager _aRRaycastManager;
     private ARPlaneManager _aRPlaneManager;
     private ARAnchorManager _aRAnchorManager;
-    private ARTrackedImageManager _arImageManager;
-    private ARFaceManager _arFaceManager;
     private ARCameraManager _arCameraManager;
     private List<ARRaycastHit> _raycastHits;
 
@@ -87,8 +83,6 @@ public class InteractionManager : MonoBehaviour
         _raycastHits = new List<ARRaycastHit>();
         _aRPlaneManager = GetComponent<ARPlaneManager>();
         _aRAnchorManager = GetComponent<ARAnchorManager>();
-        _arImageManager = GetComponent<ARTrackedImageManager>();
-        _arFaceManager = GetComponent<ARFaceManager>();
         _simulatedTouch = new Touch();
 
 
@@ -106,8 +100,6 @@ public class InteractionManager : MonoBehaviour
                 throw new MissingComponentException("Missing mode component on " + _modeObjects[i].name);
             Debug.Log("[INTERACTION_MANAGER] Found mode = " + _modes[i]);
         }
-
-        SetManagerMode(_currentManagerMode);
     }
 
     private void OnEnable()
@@ -122,32 +114,9 @@ public class InteractionManager : MonoBehaviour
         _aRAnchorManager.anchorsChanged -= OnAnchorsChanged;
     }
 
-    public void SetManagerMode(ManagerMode newMode)
-    {
-        _currentManagerMode = newMode;
-        switch (newMode)
-        {
-            case ManagerMode.Planes:
-                ShowPlanes(true);
-                _arImageManager.enabled = false;
-                _arFaceManager.enabled = false;
-                break;
-            case ManagerMode.Images:
-                ShowPlanes(false);
-                _arImageManager.enabled = true;
-                _arFaceManager.enabled = false;
-                break;
-            case ManagerMode.Faces:
-                ShowPlanes(false);
-                _arImageManager.enabled = false;
-                _arFaceManager.enabled = true;
-                break;
-            default:
-                break;
-        }
-    }
+    
 
-    private void ShowPlanes(bool state)
+    public void ShowPlanes(bool state)
     {
         foreach (ARPlane plane in _aRPlaneManager.trackables)
             plane.gameObject.SetActive(state);
