@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FishPrefab: {fileID: 8757036723512682654, guid: e303406f879f975448b5704fb44e4b98,
     type: 3}
-  Name: 
+  Name: Chillyshka
   Icon: {fileID: 0}

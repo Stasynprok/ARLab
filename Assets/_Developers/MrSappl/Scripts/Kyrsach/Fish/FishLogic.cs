@@ -33,19 +33,24 @@ public class FishLogic : MonoBehaviour
 			return;
 		}
 		
+		if(_timer <= 0.0f)
+		{
+			_timer = UnityEngine.Random.Range(5f, 10f);
+		}
+		
 		if(_timer > 0.0f)
 		{
 			_timer -= Time.deltaTime;
-			return;
 		}
 		
-		_timer = UnityEngine.Random.Range(5f, 10f);
-		
-		_isBite = UnityEngine.Random.value < 0.5f;
-		
-		if(_isBite)
+		if(_timer < 0.0f)
 		{
-			OnBite();
+			_isBite = UnityEngine.Random.Range(0, 100) < 5;
+		
+			if(_isBite)
+			{
+				OnBite();
+			}
 		}
 	}
 	

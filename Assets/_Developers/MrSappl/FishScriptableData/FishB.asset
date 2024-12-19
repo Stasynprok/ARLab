@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FishPrefab: {fileID: 1179052043055918323, guid: 7bfc0d66691be2a4eb7ec5f56f8599c7,
     type: 3}
-  Name: 
+  Name: Bober
   Icon: {fileID: 0}

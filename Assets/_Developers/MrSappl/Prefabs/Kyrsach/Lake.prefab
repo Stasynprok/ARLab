@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parentTransform: {fileID: 528737216625523116}
-  _maxCountFishOnScene: 2
+  _maxCountFishOnScene: 5
   RadiusCircle: 1
   GenerationParameters:
   - Count: 3
