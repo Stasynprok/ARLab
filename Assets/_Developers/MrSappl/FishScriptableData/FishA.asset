@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FishPrefab: {fileID: 8248184723454529679, guid: 470d1091b637e6e43aa118901f01d2dc,
     type: 3}
-  Name: Abober
-  Icon: {fileID: 0}
+  Name: "\u0410\u0431\u043E\u0431\u0443\u0441 \u043E\u0431\u044B\u043A\u043D\u043E\u0432\u0435\u043D\u043D\u044B\u0439"
+  Icon: {fileID: 21300000, guid: 74a7a1ddc568bcd46aee6a755810548d, type: 3}

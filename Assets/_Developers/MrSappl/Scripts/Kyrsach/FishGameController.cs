@@ -8,6 +8,7 @@ public class FishGameController : MonoBehaviour
 	public static FishGameController Instance { get; private set; }
 	[SerializeField] private FishingRodController _fishingRodController;
 	[SerializeField] private FishInfoPanel _fishInfoUI;
+	[SerializeField] private FishListController _fishListController;
 	private FishParameters _currentFish;
 	public GameObject LakeObject;
 	public bool FishIsBite = false;
@@ -51,6 +52,7 @@ public class FishGameController : MonoBehaviour
 	{
 		Debug.LogError("OnBiteFish");
 		_currentFish = fishLogic;
+		
 		_fishingRodController.StartBobberBiteAnimation();
 	}
 	
@@ -63,6 +65,8 @@ public class FishGameController : MonoBehaviour
 		_fishInfoUI.SetParameters(_currentFish);
 		_fishInfoUI.TranslateFishGameObjectToScreen();
 		_fishInfoUI.Activate();
+		
+		_fishListController.AddFishInList(_currentFish);
 		_currentFish = null;
 	}
 	
@@ -70,13 +74,15 @@ public class FishGameController : MonoBehaviour
 }
 public class FishParameters
 {
+	public Sprite FishImage;
 	public string Name;
 	public float Weight;
 	public Transform FishTransform;
 	public Action FishReleaseToPool;
 	
-	public FishParameters(string name, float weight, Transform fishTransform, Action fishReleaseToPool)
+	public FishParameters(Sprite fishImage, string name, float weight, Transform fishTransform, Action fishReleaseToPool)
 	{
+		FishImage = fishImage;
 		Name = name;
 		Weight = weight;
 		FishTransform = fishTransform;

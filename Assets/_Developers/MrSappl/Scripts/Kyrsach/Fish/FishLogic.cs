@@ -111,7 +111,6 @@ public class FishLogic : MonoBehaviour
 		_sequence.Append(transform.DOMove(_destinationPoint, Speed));
 		_sequence.Join(transform.DOLookAt(_destinationPoint, SpeedLookAt));
 		_sequence.OnComplete(() => {
-				Debug.LogError("OnComplete");
 				NewPoint();});
 	}
 	private void MoveToBobber()
@@ -145,7 +144,7 @@ public class FishLogic : MonoBehaviour
 			return;
 		}
 		Debug.LogError("OnFishDestinationBobber");
-		FishParameters fishParameters = new FishParameters(_fishData.Name, _weight, gameObject.transform, ReturToPool);
+		FishParameters fishParameters = new FishParameters(_fishData.Icon, _fishData.Name, _weight, gameObject.transform, ReturToPool);
 		FishGameController.Instance.OnBiteFish(fishParameters);
 	}
 	
