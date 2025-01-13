@@ -63,7 +63,7 @@ public class FishLogic : MonoBehaviour
 		FishGameController.Instance.FishIsBite = true;
 		KillAnimation();
 		Vector3 bobberPositionOnLake = FishGameController.Instance.GetBobberPositionOnLake();
-		bobberPositionOnLake = new Vector3(bobberPositionOnLake.x, 0f, bobberPositionOnLake.z);
+		bobberPositionOnLake = new Vector3(bobberPositionOnLake.x, transform.position.y, bobberPositionOnLake.z);
 		
 		_destinationPoint = FishGameController.Instance.LakeObject.transform.TransformPoint(bobberPositionOnLake);
 		MoveToBobber();

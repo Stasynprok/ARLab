@@ -11,7 +11,8 @@ public class FishingGameMode : MonoBehaviour, IInteractionManagerMode
 	[Header("Game settings")]
 	[SerializeField] private string _lakeTag;
 	[SerializeField] private FishingRodController _fishingRodController;
-	[SerializeField] private Button _returnBobberButton;
+	//[SerializeField] private Button _returnBobberButton;
+	[SerializeField] private ReleaseFishMove _releaseFishMove;
 	
 	private bool _isBobberLaunched = false;
 	
@@ -31,7 +32,8 @@ public class FishingGameMode : MonoBehaviour, IInteractionManagerMode
 	{
 		_ui.SetActive(true);
 		_fishingRodController.Activate();
-		_returnBobberButton.onClick.AddListener(ReturnBobber);
+		//_returnBobberButton.onClick.AddListener(ReturnBobber);
+		_releaseFishMove.OnRelease += ReturnBobber;
 	}
 	
 	private void ReturnBobber()
@@ -44,7 +46,8 @@ public class FishingGameMode : MonoBehaviour, IInteractionManagerMode
 	{
 		_ui.SetActive(false);
 		_fishingRodController.Deactivate();
-		_returnBobberButton.onClick.RemoveListener(ReturnBobber);
+		//_returnBobberButton.onClick.RemoveListener(ReturnBobber);
+		_releaseFishMove.OnRelease -= ReturnBobber;
 	}
 	
 	public void TouchInteraction(Touch[] touches)

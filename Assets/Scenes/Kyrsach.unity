@@ -185,6 +185,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BackBobber
       objectReference: {fileID: 0}
+    - target: {fileID: 4347247092083671027, guid: 3237653c6a57cb144bfd77cdb11407b9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4606862551047700053, guid: 3237653c6a57cb144bfd77cdb11407b9,
         type: 3}
       propertyPath: m_Pivot.x
@@ -2730,7 +2735,7 @@ MonoBehaviour:
     type: 3}
   _lakeTag: CreatedObject
   _fishingRodController: {fileID: 717563442}
-  _returnBobberButton: {fileID: 1659548480}
+  _releaseFishMove: {fileID: 1599596378}
 --- !u!1 &1152807640
 GameObject:
   m_ObjectHideFlags: 0
@@ -3463,6 +3468,7 @@ GameObject:
   - component: {fileID: 1599596374}
   - component: {fileID: 1599596373}
   - component: {fileID: 1599596372}
+  - component: {fileID: 1599596378}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3731,6 +3737,20 @@ Transform:
   - {fileID: 717563441}
   m_Father: {fileID: 1298047831}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1599596378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599596370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd47dc25a0eab4348a9c19e882636039, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AccelerationToRelease: 300
+  Acceleration: 0
 --- !u!1 &1600864375
 GameObject:
   m_ObjectHideFlags: 0
@@ -4080,18 +4100,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &1659548480 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3858933525028511994, guid: 3237653c6a57cb144bfd77cdb11407b9,
-    type: 3}
-  m_PrefabInstance: {fileID: 71678650}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1782545873
 GameObject:
   m_ObjectHideFlags: 0
